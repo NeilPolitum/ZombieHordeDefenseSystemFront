@@ -1,0 +1,35 @@
+:host {
+    display: inline-block;
+}
+
+.stat-badge {
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+    padding: 0.75rem 1.1rem;
+    border: 1px solid rgba(145, 163, 94, 0.2);
+    border-radius: 0.95rem;
+    background: linear-gradient(180deg, #111711 0%, #0a0e0a 100%);
+    box-shadow:
+        0 4px 16px rgba(0, 0, 0, 0.3),
+        inset 0 1px 0 rgba(255, 255, 255, 0.04);
+    min-width: 5rem;
+    text-align: center;
+}
+
+.stat-label {
+    font-size: 0.68rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.16em;
+    color: #7a8c6e;
+    line-height: 1;
+}
+
+.stat-value {
+    font-size: 1.55rem;
+    font-weight: 700;
+    line-height: 1;
+    color: #edf2df;
+    letter-spacing: 0.02em;
+}

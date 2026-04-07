@@ -1,0 +1,200 @@
+:host {
+    display: block;
+}
+
+.zombie-card {
+    position: relative;
+    overflow: hidden;
+    display: grid;
+    gap: 1.25rem;
+    padding: 1.3rem;
+    border: 1px solid rgba(145, 163, 94, 0.28);
+    border-radius: 1.2rem;
+    background:
+        radial-gradient(circle at top right, rgba(164, 186, 78, 0.18), transparent 32%),
+        linear-gradient(160deg, #0d120f 0%, #161d17 48%, #090c0a 100%);
+    color: #edf2df;
+    box-shadow:
+        0 20px 44px rgba(0, 0, 0, 0.36),
+        inset 0 1px 0 rgba(255, 255, 255, 0.04);
+}
+
+.zombie-card::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(130deg, transparent 0 65%, rgba(233, 190, 77, 0.08) 100%);
+    pointer-events: none;
+}
+
+.card-noise {
+    position: absolute;
+    inset: 0;
+    background:
+        repeating-linear-gradient(
+            90deg,
+            rgba(255, 255, 255, 0.02) 0,
+            rgba(255, 255, 255, 0.02) 1px,
+            transparent 1px,
+            transparent 22px
+        );
+    opacity: 0.18;
+    pointer-events: none;
+}
+
+.card-header,
+.threat-section,
+.stats-grid {
+    position: relative;
+    z-index: 1;
+}
+
+.card-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 1rem;
+}
+
+.title-group h3 {
+    margin: 0.3rem 0 0;
+    font-family: 'Arial Narrow', 'Franklin Gothic Medium', sans-serif;
+    font-size: 1.45rem;
+    line-height: 1.1;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+}
+
+.eyebrow,
+.section-label,
+.score-badge span,
+.status-pill {
+    text-transform: uppercase;
+    letter-spacing: 0.16em;
+    font-size: 0.72rem;
+}
+
+.eyebrow,
+.section-label {
+    color: #95a677;
+}
+
+.score-badge {
+    min-width: 5.25rem;
+    padding: 0.75rem 0.9rem;
+    border: 1px solid rgba(233, 190, 77, 0.3);
+    border-radius: 0.95rem;
+    background: linear-gradient(180deg, rgba(68, 61, 31, 0.9), rgba(39, 36, 19, 0.92));
+    text-align: center;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05);
+}
+
+.score-badge span {
+    display: block;
+    color: #e7c671;
+}
+
+.score-badge strong {
+    display: block;
+    margin-top: 0.2rem;
+    font-size: 1.55rem;
+    color: #fff1b9;
+}
+
+.threat-section {
+    display: grid;
+    gap: 0.85rem;
+}
+
+.threat-copy,
+.threat-meta {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+}
+
+.threat-meta strong {
+    font-size: 1.1rem;
+}
+
+.status-pill {
+    padding: 0.35rem 0.55rem;
+    border: 1px solid rgba(145, 163, 94, 0.28);
+    border-radius: 999px;
+    background: rgba(133, 152, 80, 0.12);
+    color: #d0dfaa;
+}
+
+.threat-bars {
+    display: grid;
+    grid-template-columns: repeat(10, minmax(0, 1fr));
+    gap: 0.35rem;
+}
+
+.threat-bar {
+    height: 0.72rem;
+    border-radius: 999px;
+    background: rgba(210, 220, 192, 0.1);
+    border: 1px solid rgba(158, 172, 123, 0.1);
+    box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.03);
+}
+
+.threat-bar.is-active {
+    background: linear-gradient(90deg, #b5c76f 0%, #d7b24f 100%);
+    border-color: rgba(225, 196, 98, 0.42);
+    box-shadow: 0 0 12px rgba(215, 178, 79, 0.2);
+}
+
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.8rem;
+}
+
+.stat-tile {
+    padding: 0.9rem 1rem;
+    border: 1px solid rgba(145, 163, 94, 0.2);
+    border-radius: 0.95rem;
+    background: rgba(18, 24, 19, 0.76);
+}
+
+.stat-tile strong {
+    display: block;
+    margin-top: 0.3rem;
+    font-size: 1.2rem;
+    color: #f1f6e4;
+}
+
+.zombie-card.is-critical {
+    border-color: rgba(222, 119, 79, 0.42);
+}
+
+.zombie-card.is-critical .status-pill {
+    background: rgba(116, 38, 25, 0.3);
+    border-color: rgba(222, 119, 79, 0.35);
+    color: #ffb79d;
+}
+
+.zombie-card.is-critical .threat-bar.is-active {
+    background: linear-gradient(90deg, #d37d42 0%, #df5656 100%);
+    border-color: rgba(235, 112, 90, 0.4);
+    box-shadow: 0 0 12px rgba(223, 86, 86, 0.24);
+}
+
+@media (max-width: 640px) {
+    .card-header,
+    .threat-copy,
+    .threat-meta {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .score-badge {
+        width: 100%;
+    }
+
+    .stats-grid {
+        grid-template-columns: 1fr;
+    }
+}

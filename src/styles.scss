@@ -1,1 +1,21 @@
-/* You can add global styles to this file, and also import other style files */
+*, *::before, *::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+html, body {
+    height: 100%;
+}
+
+body {
+    background-color: #090c0a;
+    color: #edf2df;
+    font-family: 'Arial Narrow', 'Franklin Gothic Medium', 'Arial', sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+input, button {
+    font-family: inherit;
+}

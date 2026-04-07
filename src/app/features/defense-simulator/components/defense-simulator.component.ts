@@ -1,113 +1,69 @@
 import { CommonModule } from '@angular/common';
 import { HttpErrorResponse } from '@angular/common/http';
-import { Component, inject, signal, computed } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
+import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
+import { finalize } from 'rxjs';
 
 import { DefenseStrategy } from '@core/models';
+import { StatBadgeComponent } from '@shared/components/stat-badge/stat-badge.component';
+import { ZombieCardComponent } from '@shared/components/zombie-card/zombie-card.component';
+
 import { DefenseService } from '../services/defense.service';
 
 @Component({
     selector: 'app-defense-simulator',
     standalone: true,
-    imports: [CommonModule, FormsModule],
-    template: `
-        <div class="container">
-            <section>
-                <h1>Defense Simulator</h1>
-                <p>
-                    Ingresa tus recursos disponibles (balas y tiempo) para calcular la mejor estrategia contra la horda.
-                </p>
-
-                <form (ngSubmit)="onCalculate()" class="form-grid">
-                    <label for="bulletsInput">Bullets</label>
-                    <input
-                        id="bulletsInput"
-                        type="number"
-                        name="bullets"
-                        min="1"
-                        [(ngModel)]="bullets"
-                        required
-                    />
-
-                    <label for="secondsInput">Seconds Available</label>
-                    <input
-                        id="secondsInput"
-                        type="number"
-                        name="seconds"
-                        min="1"
-                        [(ngModel)]="seconds"
-                        required
-                    />
-
-                    <button type="submit" [disabled]="isLoading() || bullets < 1 || seconds < 1">
-                        {{ isLoading() ? 'Calculando...' : 'Calcular estrategia' }}
-                    </button>
-                </form>
-
-                <p *ngIf="errorMessage()" class="error">{{ errorMessage() }}</p>
-            </section>
-
-            <section *ngIf="hasResults()">
-                <article class="result-card" *ngIf="simulationResult() as strategy">
-                    <h2>Resultado óptimo</h2>
-                    <p><strong>Total Score:</strong> {{ strategy.totalScore }}</p>
-                    <p><strong>Bullets Used:</strong> {{ strategy.bulletsUsed }}</p>
-                    <p><strong>Seconds Used:</strong> {{ strategy.secondsUsed }}</p>
-
-                    <h3>Zombies eliminados</h3>
-                    <ul *ngIf="strategy.zombies.length > 0; else emptyState">
-                        <li *ngFor="let zombie of strategy.zombies">
-                            {{ zombie.name }} (ID: {{ zombie.id }}) - Score: {{ zombie.score }}, Threat: {{ zombie.threatLevel }},
-                            Bullets: {{ zombie.bulletsRequired }}, Time: {{ zombie.timeToShoot }}
-                        </li>
-                    </ul>
-                </article>
-            </section>
-
-            <section *ngIf="historicalRankings().length > 0">
-                <h2>Historial</h2>
-                <article *ngFor="let ranking of historicalRankings(); let index = index">
-                    <h3>Simulación #{{ index + 1 }}</h3>
-                    <p>Score: {{ ranking.totalScore }} | Bullets: {{ ranking.bulletsUsed }} | Seconds: {{ ranking.secondsUsed }}</p>
-                </article>
-            </section>
-
-            <ng-template #emptyState>
-                <p>No se pudieron eliminar zombies con los recursos disponibles.</p>
-            </ng-template>
-        </div>
-    `
+    imports: [CommonModule, ReactiveFormsModule, ZombieCardComponent, StatBadgeComponent],
+    templateUrl: './defense-simulator.component.html',
+    styleUrl: './defense-simulator.component.scss',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class DefenseSimulatorComponent {
     private readonly defenseService = inject(DefenseService);
+    private readonly fb = inject(FormBuilder);
 
-    bullets = 10;
-    seconds = 8;
+    readonly form = this.fb.nonNullable.group({
+        bullets: [30, [Validators.required, Validators.min(1)]],
+        secondsAvailable: [30, [Validators.required, Validators.min(1)]]
+    });
 
-    simulationResult = signal<DefenseStrategy | null>(null);
-    isLoading = signal<boolean>(false);
-    errorMessage = signal<string | null>(null);
-    historicalRankings = signal<DefenseStrategy[]>([]);
+    readonly simulationResult = signal<DefenseStrategy | null>(null);
+    readonly isLoading = signal(false);
+    readonly errorMessage = signal<string | null>(null);
+    readonly historicalRankings = signal<DefenseStrategy[]>([]);
 
-    hasResults = computed(() => this.simulationResult() !== null);
+    readonly hasResults = computed(() => this.simulationResult() !== null);
+
+    trackById(_: number, item: { id: number }): number {
+        return item.id;
+    }
+
+    trackByIndex(index: number): number {
+        return index;
+    }
 
     onCalculate(): void {
+        if (this.form.invalid) {
+            this.form.markAllAsTouched();
+            return;
+        }
+
         this.errorMessage.set(null);
         this.isLoading.set(true);
 
-        this.defenseService.calculateStrategy(this.bullets, this.seconds).subscribe({
-            next: (response) => {
-                this.simulationResult.set(response);
-                this.loadHistoricalRankings();
-            },
-            error: (error: HttpErrorResponse) => {
-                this.errorMessage.set(this.buildErrorMessage(error));
-                this.isLoading.set(false);
-            },
-            complete: () => {
-                this.isLoading.set(false);
-            }
-        });
+        const { bullets, secondsAvailable } = this.form.getRawValue();
+
+        this.defenseService.calculateStrategy(bullets, secondsAvailable)
+            .pipe(finalize(() => this.isLoading.set(false)))
+            .subscribe({
+                next: (response) => {
+                    this.simulationResult.set(response);
+                    this.loadHistoricalRankings();
+                },
+                error: (error: HttpErrorResponse) => {
+                    this.errorMessage.set(this.buildErrorMessage(error));
+                }
+            });
     }
 
     private loadHistoricalRankings(): void {

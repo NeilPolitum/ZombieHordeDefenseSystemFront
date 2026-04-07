@@ -1,0 +1,45 @@
+<article class="zombie-card" [class.is-critical]="clampedThreatLevel >= 8">
+    <div class="card-noise"></div>
+
+    <header class="card-header">
+        <div class="title-group">
+            <span class="eyebrow">Target profile</span>
+            <h3>{{ zombie.name }}</h3>
+        </div>
+
+        <div class="score-badge">
+            <span>Score</span>
+            <strong>{{ zombie.score }}</strong>
+        </div>
+    </header>
+
+    <section class="threat-section">
+        <div class="threat-copy">
+            <span class="section-label">Threat level</span>
+            <div class="threat-meta">
+                <strong>{{ clampedThreatLevel }}/10</strong>
+                <span class="status-pill">{{ threatStatus }}</span>
+            </div>
+        </div>
+
+        <div class="threat-bars" aria-label="Threat level indicator">
+            <span
+                *ngFor="let level of threatScale"
+                class="threat-bar"
+                [class.is-active]="isThreatActive(level)">
+            </span>
+        </div>
+    </section>
+
+    <footer class="stats-grid">
+        <section class="stat-tile">
+            <span class="section-label">Bullets required</span>
+            <strong>{{ zombie.bulletsRequired }}</strong>
+        </section>
+
+        <section class="stat-tile">
+            <span class="section-label">Time to shoot</span>
+            <strong>{{ zombie.timeToShoot }}s</strong>
+        </section>
+    </footer>
+</article>

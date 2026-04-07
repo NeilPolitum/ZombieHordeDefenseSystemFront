@@ -1,0 +1,203 @@
+.simulator-container {
+    display: flex;
+    flex-direction: column;
+    gap: 3rem;
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 2.5rem 1.5rem;
+    color: #edf2df;
+}
+
+/* ── Header ───────────────────────────────────── */
+.simulator-header {
+    margin-bottom: 1.75rem;
+}
+
+.eyebrow {
+    display: block;
+    font-size: 0.7rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: #7a8c6e;
+    margin-bottom: 0.4rem;
+}
+
+h1 {
+    font-family: 'Arial Narrow', 'Franklin Gothic Medium', sans-serif;
+    font-size: 2.2rem;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    margin: 0 0 0.5rem;
+    color: #f1f6e4;
+}
+
+.simulator-header p {
+    font-size: 0.95rem;
+    color: #95a677;
+    margin: 0;
+}
+
+/* ── Form ─────────────────────────────────────── */
+.resource-form {
+    display: grid;
+    grid-template-columns: 1fr 1fr auto;
+    align-items: end;
+    gap: 1rem;
+}
+
+.field-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.45rem;
+}
+
+.field-group label {
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    color: #7a8c6e;
+}
+
+.field-group input {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    border: 1px solid rgba(145, 163, 94, 0.25);
+    border-radius: 0.75rem;
+    background: #0d120f;
+    color: #edf2df;
+    font-size: 1rem;
+    outline: none;
+    box-sizing: border-box;
+    transition: border-color 0.2s, box-shadow 0.2s;
+
+    &:focus {
+        border-color: rgba(181, 199, 111, 0.55);
+        box-shadow: 0 0 0 3px rgba(181, 199, 111, 0.08);
+    }
+
+    &::-webkit-inner-spin-button,
+    &::-webkit-outer-spin-button {
+        opacity: 0.3;
+    }
+}
+
+.btn-calculate {
+    padding: 0.78rem 1.5rem;
+    border: 1px solid rgba(181, 199, 111, 0.4);
+    border-radius: 0.75rem;
+    background: linear-gradient(160deg, #2e361d 0%, #1d2414 100%);
+    color: #d7e6aa;
+    font-size: 0.9rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: background 0.2s, border-color 0.2s;
+
+    &:hover:not(:disabled) {
+        background: linear-gradient(160deg, #3e4d26 0%, #28351a 100%);
+        border-color: rgba(181, 199, 111, 0.65);
+    }
+
+    &:disabled {
+        opacity: 0.4;
+        cursor: not-allowed;
+    }
+}
+
+/* ── Error ────────────────────────────────────── */
+.error {
+    margin-top: 1rem;
+    padding: 0.75rem 1rem;
+    border: 1px solid rgba(222, 119, 79, 0.35);
+    border-radius: 0.75rem;
+    background: rgba(116, 38, 25, 0.18);
+    color: #ffb79d;
+    font-size: 0.9rem;
+}
+
+/* ── Section titles ───────────────────────────── */
+.section-title {
+    font-family: 'Arial Narrow', 'Franklin Gothic Medium', sans-serif;
+    font-size: 1.3rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: #d0dfaa;
+    margin: 0 0 1.25rem;
+}
+
+.section-subtitle {
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    color: #7a8c6e;
+    margin: 1.75rem 0 1rem;
+}
+
+/* ── Stats row ────────────────────────────────── */
+.stats-row {
+    display: flex;
+    gap: 0.9rem;
+    flex-wrap: wrap;
+}
+
+/* ── Zombies grid ─────────────────────────────── */
+.zombies-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
+    gap: 1.1rem;
+}
+
+.empty-state {
+    color: #7a8c6e;
+    font-style: italic;
+    font-size: 0.9rem;
+}
+
+/* ── History ──────────────────────────────────── */
+.history-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.history-entry {
+    display: flex;
+    align-items: center;
+    gap: 1.25rem;
+    padding: 1rem 1.25rem;
+    border: 1px solid rgba(145, 163, 94, 0.15);
+    border-radius: 0.95rem;
+    background: #0d120f;
+}
+
+.history-index {
+    font-size: 0.68rem;
+    text-transform: uppercase;
+    letter-spacing: 0.16em;
+    color: #7a8c6e;
+    min-width: 3.5rem;
+}
+
+.history-stats {
+    display: flex;
+    gap: 0.7rem;
+    flex-wrap: wrap;
+}
+
+/* ── Responsive ───────────────────────────────── */
+@media (max-width: 640px) {
+    .resource-form {
+        grid-template-columns: 1fr;
+    }
+
+    .stats-row,
+    .history-stats {
+        flex-direction: column;
+    }
+
+    .history-entry {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+}

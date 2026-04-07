@@ -1,0 +1,87 @@
+<div class="simulator-container">
+
+    <!-- ── Header + Form ─────────────────────────── -->
+    <section class="form-section">
+        <header class="simulator-header">
+            <span class="eyebrow">Zombie Defense System</span>
+            <h1>Defense Simulator</h1>
+            <p>Ingresa tus recursos disponibles para calcular la estrategia óptima contra la horda.</p>
+        </header>
+
+        <form [formGroup]="form" (ngSubmit)="onCalculate()" class="resource-form">
+            <div class="field-group">
+                <label for="bullets">Bullets</label>
+                <input
+                    id="bullets"
+                    type="number"
+                    formControlName="bullets"
+                    min="1"
+                    placeholder="e.g. 30"
+                />
+            </div>
+
+            <div class="field-group">
+                <label for="secondsAvailable">Seconds Available</label>
+                <input
+                    id="secondsAvailable"
+                    type="number"
+                    formControlName="secondsAvailable"
+                    min="1"
+                    placeholder="e.g. 30"
+                />
+            </div>
+
+            <button type="submit" class="btn-calculate" [disabled]="form.invalid || isLoading()">
+                <span *ngIf="!isLoading()">Calcular estrategia</span>
+                <span *ngIf="isLoading()">Calculando...</span>
+            </button>
+        </form>
+
+        <p *ngIf="errorMessage()" class="error">{{ errorMessage() }}</p>
+    </section>
+
+    <!-- ── Results ────────────────────────────────── -->
+    <section class="result-section" *ngIf="hasResults()">
+        <ng-container *ngIf="simulationResult() as strategy">
+            <h2 class="section-title">Resultado óptimo</h2>
+
+            <div class="stats-row">
+                <app-stat-badge label="Total Score" [value]="strategy.totalScore" />
+                <app-stat-badge label="Bullets Used" [value]="strategy.bulletsUsed" />
+                <app-stat-badge label="Seconds Used" [value]="strategy.secondsUsed + 's'" />
+            </div>
+
+            <h3 class="section-subtitle">Zombies eliminados</h3>
+
+            <p *ngIf="strategy.zombies.length === 0" class="empty-state">
+                No se pudieron eliminar zombies con los recursos disponibles.
+            </p>
+
+            <div class="zombies-grid" *ngIf="strategy.zombies.length > 0">
+                <app-zombie-card
+                    *ngFor="let zombie of strategy.zombies; trackBy: trackById"
+                    [zombie]="zombie"
+                />
+            </div>
+        </ng-container>
+    </section>
+
+    <!-- ── History ────────────────────────────────── -->
+    <section class="history-section" *ngIf="historicalRankings().length > 0">
+        <h2 class="section-title">Historial de simulaciones</h2>
+
+        <div class="history-list">
+            <article
+                class="history-entry"
+                *ngFor="let ranking of historicalRankings(); let i = index; trackBy: trackByIndex">
+                <span class="history-index">sim #{{ i + 1 }}</span>
+                <div class="history-stats">
+                    <app-stat-badge label="Score" [value]="ranking.totalScore" />
+                    <app-stat-badge label="Bullets" [value]="ranking.bulletsUsed" />
+                    <app-stat-badge label="Seconds" [value]="ranking.secondsUsed + 's'" />
+                </div>
+            </article>
+        </div>
+    </section>
+
+</div>
